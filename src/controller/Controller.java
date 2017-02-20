@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Stack;
+
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
@@ -20,49 +22,49 @@ public class Controller {
 			public void widgetSelected(SelectionEvent e) {
 				switch (num) {
 				case "0" :
-					m.addChar('0');
+					addToExpression('0');
 					break;
 				case "1" :
-					m.addChar('1');
+					addToExpression('1');
 					break;
 				case "2" :
-					m.addChar('2');
+					addToExpression('2');
 					break;
 				case "3" :
-					m.addChar('3');
+					addToExpression('3');
 					break;
 				case "4" :
-					m.addChar('4');
+					addToExpression('4');
 					break;
 				case "5" :
-					m.addChar('5');
+					addToExpression('5');
 					break;
 				case "6" :
-					m.addChar('6');
+					addToExpression('6');
 					break;
 				case "7" :
-					m.addChar('7');
+					addToExpression('7');
 					break;
 				case "8" :
-					m.addChar('8');
+					addToExpression('8');
 					break;
 				case "9" :
-					m.addChar('9');
+					addToExpression('9');
 					break;
 				case "+" :
-					m.addChar('+');
+					addToExpression('+');
 					break;
 				case "-" :
-					m.addChar('-');
+					addToExpression('-');
 					break;
 				case "*" :
-					m.addChar('*');
+					addToExpression('*');
 					break;
 				case "/" :
-					m.addChar('/');
+					addToExpression('/');
 					break;
 				case "." :
-					m.addChar('.');
+					addToExpression('.');
 					break;
 				
 				}
@@ -92,10 +94,52 @@ public class Controller {
 			}
 		};
 	}
+	/*Adds characters to the stack of input, combining decimals and multiple digit numbers*/
+	public void addToExpression(char c){
+		Stack<String> stack = m.getQueue();
+		if(stack.size()>0){
+			String top = stack.peek();
+			if(isOp(top)){
+				m.addToStack(Character.toString(c));
+			}else{
+				if(isOp(c)){
+					m.addToStack(Character.toString(c));
+				}else{
+					m.removeQHead();
+					m.addToStack(top+c);
+				}
+			}
+		}else{
+			m.addToStack(Character.toString(c));
+		}
+	}
 
 	public void calculate(){
-		String exp = m.getExpression();
-		m.setExpression(exp);
+		System.out.println("equals");
+		//Use two stacks
+		//Flip the stack first to go left to right
+		//Then go through flipping the stack back, performing priority ops
+		//Then perform other ops
+		
+	}
+	private boolean isOp(char c){
+		if(c == '*' || c == '/' || c=='+' || c=='-' ){
+			return true;
+		}
+		return false;
+	}
+	private boolean isOp(String s){
+		if(s.equals("*") || s.equals("/") || s.equals("+") || s.equals("-") ){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isPriorityOp(char c){
+		if(c == '*' || c == '/' ){
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -1,13 +1,16 @@
 package model;
 
 import java.util.Observable;
+import java.util.Stack;
 
 public class Model extends Observable{
 	
-	String expression; 
+	String expression;
+	Stack<String> stack;
 	
 	public Model(){
 		this.expression = "";
+		stack = new Stack<String>();
 	}
 	public void addChar(char c){
 		expression = expression + c;
@@ -21,5 +24,17 @@ public class Model extends Observable{
 	public void setExpression(String expression) {
 		this.expression = expression;
 		
+	}
+	public Stack<String> getQueue(){
+		return stack;		
+	}
+	public void addToStack(String s){
+		stack.add(s);
+		expression = stack.toString();
+		setChanged();
+		notifyObservers();
+	}
+	public void removeQHead(){
+		stack.pop();
 	}
 }
