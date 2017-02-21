@@ -68,5 +68,15 @@ public class Model extends Observable{
 		setChanged();
 		notifyObservers();
 	}
+	public void setFinalAnswer(Long l){
+		expression = l.toString();
+		setChanged();
+		notifyObservers();
+	}
+	public void setFinalAnswer(Double d){
+		expression = d.toString();
+		setChanged();
+		notifyObservers();
+	}
 	
 }

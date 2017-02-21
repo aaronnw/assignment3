@@ -116,7 +116,6 @@ public class Controller {
 	}
 
 	public void calculate(){
-		System.out.println("equals");
 		//Flip the stack first to go left to right
 		m.flipStack();
 		//Change the stack to a list
@@ -130,7 +129,14 @@ public class Controller {
 			//Then perform other ops
 			calcResult();
 			//Round or remove decimal
-			simplifyAnswer();
+			ArrayList<String> list = m.getList();
+			if(isLongable(list.get(0))){
+				long answer = simplifyAnswer(list.get(0));
+				m.setFinalAnswer(answer);
+			}else{
+				double answer = Double.parseDouble(list.get(0));
+				m.setFinalAnswer(answer);
+			}
 		}else{
 			System.out.println("Syntax error");
 		}
@@ -171,12 +177,10 @@ public class Controller {
 	
 	public void calcPriorityOps(){
 		ArrayList<String> list = m.getList();
-		System.out.println(list.toString());
 		//Iterate through the list, starting from the second and going to the second to last
 		for(int i = 1; i < list.size() -1 ; i ++){
 			Double result = 0.0;
 			String current = list.get(i);
-			System.out.println(current);
 			//If there is a priority op
 			if(isPriorityOp(current)){
 				String next = list.get(i+1);
@@ -199,7 +203,6 @@ public class Controller {
 
 	public void calcResult(){
 		ArrayList<String> list = m.getList();
-		System.out.println(list);
 		if(list.size() < 3){
 			m.setOutput(Double.parseDouble(list.get(0)));
 			return;
@@ -218,7 +221,6 @@ public class Controller {
 			//Remove 1 twice to remove the next two elements
 			list.remove(1);
 			list.remove(1);
-			System.out.println(list.toString());
 			calcResult();
 		}else{
 			System.out.println("Syntax err");
@@ -226,10 +228,22 @@ public class Controller {
 		
 	}
 	
-	public void simplifyAnswer(){
-		
+	public long simplifyAnswer(String s){
+		double answer = Double.parseDouble(s);
+		Long newAnswer = (long) 0;
+		if(answer %1 == 0){
+			newAnswer = (long) answer;
+ 		}
+		return newAnswer;
 	}
-	
+	//Yeah it's what you think
+	private boolean isLongable(String s){
+		double answer = Double.parseDouble(s);
+		if(answer %1 == 0){
+			return true;
+ 		}
+		return false;
+	}
 	private boolean isOp(char c){
 		if(c == '*' || c == '/' || c=='+' || c=='-' ){
 			return true;
