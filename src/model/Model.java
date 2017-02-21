@@ -1,16 +1,20 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Stack;
 
 public class Model extends Observable{
 	
 	String expression;
-	Stack<String> stack;
-	
+	Stack<String> inputStack;
+	ArrayList<String> list;
+	Double output; 
+
 	public Model(){
 		this.expression = "";
-		stack = new Stack<String>();
+		inputStack = new Stack<String>();
+		list = new ArrayList<String>();
 	}
 	public void addChar(char c){
 		expression = expression + c;
@@ -25,16 +29,44 @@ public class Model extends Observable{
 		this.expression = expression;
 		
 	}
-	public Stack<String> getQueue(){
-		return stack;		
+	public Stack<String> getStack(){
+		return inputStack;		
 	}
 	public void addToStack(String s){
-		stack.add(s);
-		expression = stack.toString();
+		inputStack.add(s);
+		expression = inputStack.toString();
 		setChanged();
 		notifyObservers();
 	}
-	public void removeQHead(){
-		stack.pop();
+	public void removeStackTop(){
+		inputStack.pop();
 	}
+	public void flipStack(){
+		Stack<String> newStack = new Stack<String>();
+		while(inputStack.size() > 0){
+			newStack.add(inputStack.pop());
+		}
+		inputStack = newStack;
+	}
+	public void replaceStack(Stack<String> s){
+		inputStack = s;
+	}
+	
+	public void setOutput(Double d){
+		output = d; 
+		expression = d.toString();
+		setChanged();
+		notifyObservers();
+	}
+
+	public ArrayList<String> getList() {
+		return list;
+	}
+	public void setList(ArrayList<String> list) {
+		this.list = list;
+		expression = list.toString();
+		setChanged();
+		notifyObservers();
+	}
+	
 }
