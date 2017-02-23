@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -21,55 +20,7 @@ public class Controller {
 			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				switch (num) {
-				case "0" :
-					addToExpression('0');
-					break;
-				case "1" :
-					addToExpression('1');
-					break;
-				case "2" :
-					addToExpression('2');
-					break;
-				case "3" :
-					addToExpression('3');
-					break;
-				case "4" :
-					addToExpression('4');
-					break;
-				case "5" :
-					addToExpression('5');
-					break;
-				case "6" :
-					addToExpression('6');
-					break;
-				case "7" :
-					addToExpression('7');
-					break;
-				case "8" :
-					addToExpression('8');
-					break;
-				case "9" :
-					addToExpression('9');
-					break;
-				case "+" :
-					addToExpression('+');
-					break;
-				case "-" :
-					addToExpression('-');
-					break;
-				case "*" :
-					addToExpression('*');
-					break;
-				case "/" :
-					addToExpression('/');
-					break;
-				case "." :
-					addToExpression('.');
-					break;
-				
-				}
-				
+				addToExpression(num.toCharArray()[0]);			
 			}
 			
 			@Override
@@ -95,36 +46,27 @@ public class Controller {
 			}
 		};
 	}
-	/*Adds characters to the stack of input, combining decimals and multiple digit numbers*/
+	/*Adds characters to the list of inputs, combining decimals and multiple digit numbers*/
 	public void addToExpression(char c){
-		Stack<String> stack = m.getStack();
-		if(stack.size()>0){
-			String top = stack.peek();
-			if(isOp(top)){
-				m.addToStack(Character.toString(c));
-			}else{
-				if(isOp(c)){
-					m.addToStack(Character.toString(c));
-				}else{
-					m.removeStackTop();
-					m.addToStack(top+c);
-				}
+		ArrayList<String> list = m.getList();
+		if(list.size()>0){
+			String front = list.get(list.size()-1);
+			if(!isOp(front) && !isOp(c)){
+				m.removeListFront();
+				m.addToList(front+c);
+				return;
 			}
-		}else{
-			m.addToStack(Character.toString(c));
 		}
+		m.addToList(Character.toString(c));
 	}
 
 	public void calculate(){
-		//Flip the stack first to go left to right
-		m.flipStack();
-		//Change the stack to a list
-		stackToList();
 		//Check the syntax
 		Boolean validInput = false;
 		validInput = checkSyntax();
 		if(validInput){
 			//Calculate multiplication and division 
+			System.out.println(m.getList().toString());
 			calcPriorityOps();
 			//Then perform other ops
 			calcResult();
@@ -141,16 +83,6 @@ public class Controller {
 			System.out.println("Syntax error");
 		}
 		
-	}
-	
-	public void stackToList(){
-		Stack<String> s = m.getStack();
-		ArrayList<String> list = new ArrayList<String>();
-		//Change the stack to a list
-		while(s.size()>0){
-			list.add(s.pop());
-		}
-		m.setList(list);
 	}
 	
 	public boolean checkSyntax(){
