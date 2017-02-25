@@ -2,68 +2,82 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Stack;
 
 public class Model extends Observable{
 	
-	String expression;
 	ArrayList<String> list;
 	Double output; 
+	ArrayList<String> memory;
 
 	public Model(){
-		this.expression = "";
 		list = new ArrayList<String>();
+		memory = new ArrayList<String>(); 
+		output = 0.0;
 	}
 	public void addChar(char c){
-		expression = expression + c;
 		setChanged();
-		notifyObservers();
-	}
-
-	public String getExpression() {
-		return expression;
-	}
-	public void setExpression(String expression) {
-		this.expression = expression;
-		
+		notifyObservers("entry");
 	}
 	public ArrayList<String> getList(){
 		return list;		
 	}
 	public void addToList(String s){
 		list.add(s);
-		expression = list.toString();
 		setChanged();
-		notifyObservers();
+		notifyObservers("entry");
 	}
-	public void removeListFront(){
-		list.remove(0);
+	public void backSpace(){
+		if(list.size()>0){
+			String lastString = list.get(list.size()-1);
+			if(lastString.length() == 1){
+				list.remove(list.size()-1);
+			}else{
+				String newLast = lastString.substring(0, lastString.length()-1);
+				list.set(list.size()-1, newLast);
+			}
+			setChanged();
+			notifyObservers("entry");
+		}
+	}
+	public void removeListEnd(){
+		list.remove(list.size()-1);
+	
+		setChanged();
+		notifyObservers("entry");
+	}
+	public void clearExpression(){
+		list.clear();
+		setChanged();
+		notifyObservers("entry");
 	}
 	public void replaceList(ArrayList<String> newList){
 		list = newList;
+		setChanged();
+		notifyObservers("entry");
 	}
 	
 	public void setOutput(Double d){
 		output = d; 
-		expression = d.toString();
+		list.clear();
 		setChanged();
-		notifyObservers();
+		notifyObservers("output");
 	}
 	public void setList(ArrayList<String> list) {
 		this.list = list;
-		expression = list.toString();
 		setChanged();
-		notifyObservers();
+		notifyObservers("entry");
 	}
-	public void setFinalAnswer(Long l){
-		expression = l.toString();
+	public double getOutput(){
+		return output;
+	}
+	public void storeExpression(){
+		memory = list;
 		setChanged();
-		notifyObservers();
+		notifyObservers("entry");
 	}
-	public void setFinalAnswer(Double d){
-		expression = d.toString();
+	public void recallExpression(){
+		list = memory;
 		setChanged();
-		notifyObservers();
+		notifyObservers("entry");
 	}
-	
 }

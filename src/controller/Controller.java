@@ -41,21 +41,89 @@ public class Controller {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		};
+	}
+	
+	public SelectionListener getClearPressListener(){
+		return new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				m.clearExpression();				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		};
+	}
+	
+	public SelectionListener getBackPressListener(){
+		return new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				m.backSpace();
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				
+			}
+		};
+	}
+
+	public SelectionListener getMemoryAddListener(){
+		return new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				m.storeExpression();
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
 				// TODO Auto-generated method stub
 				
 			}
 		};
 	}
 	/*Adds characters to the list of inputs, combining decimals and multiple digit numbers*/
+
+	public SelectionListener getMemoryRecallListener(){
+		return new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				m.recallExpression();
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
+	}
+
 	public void addToExpression(char c){
 		ArrayList<String> list = m.getList();
 		if(list.size()>0){
 			String front = list.get(list.size()-1);
+			if(front.contains(".") && c == '.'){
+				return;
+			}
 			if(!isOp(front) && !isOp(c)){
-				m.removeListFront();
+				m.removeListEnd();
 				m.addToList(front+c);
 				return;
 			}
+			
 		}
 		m.addToList(Character.toString(c));
 	}
@@ -70,15 +138,6 @@ public class Controller {
 			calcPriorityOps();
 			//Then perform other ops
 			calcResult();
-			//Round or remove decimal
-			ArrayList<String> list = m.getList();
-			if(isLongable(list.get(0))){
-				long answer = simplifyAnswer(list.get(0));
-				m.setFinalAnswer(answer);
-			}else{
-				double answer = Double.parseDouble(list.get(0));
-				m.setFinalAnswer(answer);
-			}
 		}else{
 			System.out.println("Syntax error");
 		}
@@ -156,8 +215,7 @@ public class Controller {
 			calcResult();
 		}else{
 			System.out.println("Syntax err");
-		}
-		
+		}		
 	}
 	
 	public long simplifyAnswer(String s){
@@ -167,14 +225,6 @@ public class Controller {
 			newAnswer = (long) answer;
  		}
 		return newAnswer;
-	}
-	//Yeah it's what you think
-	private boolean isLongable(String s){
-		double answer = Double.parseDouble(s);
-		if(answer %1 == 0){
-			return true;
- 		}
-		return false;
 	}
 	private boolean isOp(char c){
 		if(c == '*' || c == '/' || c=='+' || c=='-' ){

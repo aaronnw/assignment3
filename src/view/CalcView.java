@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class CalcView implements Observer{
-	Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq;
+	Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre;
 	Text screen;
 	Controller c;
 	Model m;
@@ -29,7 +29,7 @@ public class CalcView implements Observer{
 		Display display = new Display();
 		Shell shell = new Shell( display );
 		shell.setText( "SWT Calculator" ); 
-		shell.setSize( 200, 300 );
+		shell.setSize( 400, 500 );
 		
 		
 		initializeComponents(shell);
@@ -42,6 +42,7 @@ public class CalcView implements Observer{
 	    int x = monitorSize.x + (monitorSize.width - windowSize.width) / 2;
 	    int y = monitorSize.y + (monitorSize.height - windowSize.height) / 2;
 	    shell.setLocation(x, y);
+	    shell.setMinimumSize(350, 400);
 		shell.open();
 		while( !shell.isDisposed() ) { if( !display.readAndDispatch() ) { display.sleep();
 		}
@@ -50,7 +51,18 @@ public class CalcView implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		screen.setText(m.getExpression());
+		//Convert to a long if possible to remove unnecessary decimals
+		if(arg.equals("output")){
+			if(isLongable(m.getOutput())){
+				Long output = (long) m.getOutput();
+				screen.setText(output.toString());
+			}else{
+				Double output = m.getOutput();
+				screen.setText(output.toString());
+			}
+		}else if(arg.equals("entry")){
+			screen.setText(m.getList().toString());
+		}
 		
 	}
 	public void initializeComponents(final Shell shell){
@@ -60,6 +72,7 @@ public class CalcView implements Observer{
 		GridData screenData = new GridData();
 	    screenData.horizontalSpan = 4;
 	    screenData.grabExcessHorizontalSpace = true;
+	    screenData.grabExcessVerticalSpace = true;
 	    screenData.horizontalAlignment = GridData.FILL;
 	    screen = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	    screen.setOrientation(SWT.RIGHT_TO_LEFT);
@@ -68,12 +81,24 @@ public class CalcView implements Observer{
 	    screen.setEditable(false);
 	    screen.setLayoutData(screenData);
 	    GridData buttonData = new GridData();
-	    buttonData.minimumHeight = 10;
-	    buttonData.minimumWidth = 10;
+	    buttonData.minimumHeight = 50;
+	    buttonData.minimumWidth = 70;
 	    buttonData.grabExcessHorizontalSpace = true;
 	    buttonData.grabExcessVerticalSpace = true;
 	    buttonData.horizontalAlignment = GridData.FILL;
 	    buttonData.verticalAlignment = GridData.FILL;
+	    bClear = new Button(shell, SWT.PUSH);
+	    bClear.setLayoutData(buttonData);
+	    bClear.setText("CE");
+		bBack = new Button(shell, SWT.PUSH);
+		bBack.setLayoutData(buttonData);
+		bBack.setText("<-");
+		bMadd = new Button(shell, SWT.PUSH);
+		bMadd.setLayoutData(buttonData);
+		bMadd.setText("M-Add");
+		bMre = new Button(shell, SWT.PUSH);
+		bMre.setLayoutData(buttonData);
+		bMre.setText("M-Recall");
 		b7 = new Button(shell, SWT.PUSH);
 		b7.setLayoutData(buttonData);
 		b7.setText("7");
@@ -143,5 +168,18 @@ public class CalcView implements Observer{
 		bDiv.addSelectionListener(c.getNumPressListener("/"));
 		bDec.addSelectionListener(c.getNumPressListener("."));
 		bEq.addSelectionListener(c.getEqualsListener());
+		bClear.addSelectionListener(c.getClearPressListener());
+		bBack.addSelectionListener(c.getBackPressListener());
+		bMadd.addSelectionListener(c.getMemoryAddListener());
+		bMre.addSelectionListener(c.getMemoryRecallListener());
+		
 	}
+	//Yeah it's what you think
+		private boolean isLongable(Double d){
+			if(d %1 == 0){
+				return true;
+	 		}
+			return false;
+		}
+
 }
