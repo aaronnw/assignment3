@@ -71,12 +71,10 @@ public class Model extends Observable{
 		return output;
 	}
 	public void storeExpression(){
-		memory = list;
-		setChanged();
-		notifyObservers("entry");
+		memory = new ArrayList<String>(list);
 	}
 	public void recallExpression(){
-		list = memory;
+		list.addAll(memory);
 		setChanged();
 		notifyObservers("entry");
 	}
