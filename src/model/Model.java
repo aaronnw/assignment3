@@ -71,7 +71,12 @@ public class Model extends Observable{
 		return output;
 	}
 	public void storeExpression(){
-		memory = new ArrayList<String>(list);
+		if(list.size() == 0){
+			memory = new ArrayList<String>();
+			memory.add(output.toString());
+		}else{
+			memory = new ArrayList<String>(list);
+		}
 	}
 	public void recallExpression(){
 		list.addAll(memory);

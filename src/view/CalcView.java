@@ -1,5 +1,6 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import controller.Controller;
@@ -61,7 +62,8 @@ public class CalcView implements Observer{
 				screen.setText(output.toString());
 			}
 		}else if(arg.equals("entry")){
-			screen.setText(m.getList().toString());
+			String formattedList = formatList(m.getList());
+			screen.setText(formattedList);
 		}
 		
 	}
@@ -180,6 +182,13 @@ public class CalcView implements Observer{
 				return true;
 	 		}
 			return false;
+		}
+		private String formatList(ArrayList<String> list){
+			String result = "";
+			for(String s:list){
+				result = result + s;
+			}
+			return result;
 		}
 
 }
