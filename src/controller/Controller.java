@@ -9,12 +9,14 @@ import model.Model;
 
 public class Controller {
 
-	Model m; 
+	Model m;
 	
+	//Create a controller with a model to update
 	public Controller(Model myModel) {
 		this.m = myModel;
 	}
-	
+	//Listen for a number press
+	//This application treats the decimal as a number
 	public SelectionListener getNumPressListener(String num){
 		return new SelectionListener() {
 			
@@ -30,7 +32,7 @@ public class Controller {
 			}
 		};
 	}
-
+	//Listen for the equals button
 	public SelectionListener getEqualsListener(){
 		return new SelectionListener() {
 			
@@ -45,7 +47,7 @@ public class Controller {
 			}
 		};
 	}
-	
+	//Listen for the clear button
 	public SelectionListener getClearPressListener(){
 		return new SelectionListener() {
 			
@@ -60,7 +62,7 @@ public class Controller {
 			}
 		};
 	}
-	
+	//Listen for the backspace button
 	public SelectionListener getBackPressListener(){
 		return new SelectionListener() {
 			
@@ -75,7 +77,7 @@ public class Controller {
 			}
 		};
 	}
-
+	//Listen for the memory add button
 	public SelectionListener getMemoryAddListener(){
 		return new SelectionListener() {
 			
@@ -92,8 +94,7 @@ public class Controller {
 			}
 		};
 	}
-	/*Adds characters to the list of inputs, combining decimals and multiple digit numbers*/
-
+	//Listen for the memory recall button
 	public SelectionListener getMemoryRecallListener(){
 		return new SelectionListener() {
 			
@@ -110,7 +111,7 @@ public class Controller {
 			}
 		};
 	}
-
+	/*Adds characters to the list of inputs, combining decimals and multiple digit numbers*/
 	public void addToExpression(char c){
 		ArrayList<String> list = m.getList();
 		if(list.size()>0){
@@ -127,32 +128,34 @@ public class Controller {
 		}
 		m.addToList(Character.toString(c));
 	}
-
+	//When equals is pressed, calculate the result of the expression
 	public void calculate(){
 		//Check the syntax
 		Boolean validInput = false;
 		validInput = checkSyntax();
 		if(validInput){
 			//Calculate multiplication and division 
-			System.out.println(m.getList().toString());
 			calcPriorityOps();
 			//Then perform other ops
 			calcResult();
 		}else{
-			System.out.println("Syntax error");
+			m.reportError();
 		}
 		
 	}
-	
+	//Check if the entered expression is valid
 	public boolean checkSyntax(){
 		ArrayList<String> list = m.getList();
+		//Check for empty string
 		if(list.size() == 0){
 			return false;
 		}
+		//Check for operators to begin or end the expression
 		if(isOp(list.get(0)) || isOp(list.get(list.size()-1))){
 			return false;
 		}
-		for(int i = 1; i < list.size()-1; i ++){
+		for(int i = 1; i < list.size(); i ++){
+			//Checks for consecutive operators or numbers
 			if(isOp(list.get(i))){
 				if(isOp(list.get(i-1))){
 					return false;
@@ -162,10 +165,14 @@ public class Controller {
 					return false;
 				}
 			}
+			//Checks for lonely decimal points
+			if(list.get(i).equals(".")){
+				return false;
+			}
 		}
 		return true;
 	}
-	
+	//Calculates multiplication and division
 	public void calcPriorityOps(){
 		ArrayList<String> list = m.getList();
 		//Iterate through the list, starting from the second and going to the second to last
@@ -191,13 +198,15 @@ public class Controller {
 		}
 		m.setList(list);
 	}
-
+	//Calculate the final result
 	public void calcResult(){
 		ArrayList<String> list = m.getList();
+		//Set the result and return when the list is too small to be simplified
 		if(list.size() < 3){
 			m.setOutput(Double.parseDouble(list.get(0)));
 			return;
 		}
+		//If there is a string with a number, then operator, then number, calculate the result and repeat
 		if(!isOp(list.get(0)) && isOp(list.get(1)) && !isOp(list.get(2))){
 			Double result = 0.0; 
 			Double first = Double.parseDouble(list.get(0));
@@ -214,31 +223,24 @@ public class Controller {
 			list.remove(1);
 			calcResult();
 		}else{
-			System.out.println("Syntax err");
+			m.reportError();
 		}		
 	}
-	
-	public long simplifyAnswer(String s){
-		double answer = Double.parseDouble(s);
-		Long newAnswer = (long) 0;
-		if(answer %1 == 0){
-			newAnswer = (long) answer;
- 		}
-		return newAnswer;
-	}
+	//Check if a character is an operator
 	private boolean isOp(char c){
 		if(c == '*' || c == '/' || c=='+' || c=='-' ){
 			return true;
 		}
 		return false;
 	}
+	//Check if a string is an operator
 	private boolean isOp(String s){
 		if(s.equals("*") || s.equals("/") || s.equals("+") || s.equals("-") ){
 			return true;
 		}
 		return false;
 	}
-	
+	//Check if a string is a multiplication or division symbol
 	private boolean isPriorityOp(String s){
 		if(s.equals("*") || s.equals("/")){
 			return true;

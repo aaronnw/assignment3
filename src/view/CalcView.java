@@ -22,10 +22,12 @@ public class CalcView implements Observer{
 	Controller c;
 	Model m;
 
+	//Create the view with a given model and controller
 	public CalcView (Model myModel, Controller controller) {
 		c = controller;
 		m = myModel;
 	}
+	//Create a shell to display to the user
 	public void showView(){
 		Display display = new Display();
 		Shell shell = new Shell( display );
@@ -49,7 +51,7 @@ public class CalcView implements Observer{
 		}
 		}
 	}
-
+	//Called whenever changes are made to the model
 	@Override
 	public void update(Observable o, Object arg) {
 		//Convert to a long if possible to remove unnecessary decimals
@@ -61,12 +63,20 @@ public class CalcView implements Observer{
 				Double output = m.getOutput();
 				screen.setText(output.toString());
 			}
+		//Format the expression list to display more cleanly
 		}else if(arg.equals("entry")){
 			String formattedList = formatList(m.getList());
 			screen.setText(formattedList);
+		}else if(arg.equals("error")){
+			screen.setText("Syntax error in expression");
+		}
+		//Display 0 if there are no results to display
+		if(screen.getText().length() == 0){
+			screen.setText("0");
 		}
 		
 	}
+	//Set up the screen components
 	public void initializeComponents(final Shell shell){
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.makeColumnsEqualWidth = true;
@@ -152,7 +162,7 @@ public class CalcView implements Observer{
 		
 		
 	}
-
+	//Set the listeners in the controller to listen to the components
 	public void setListeners(){
 		b0.addSelectionListener(c.getNumPressListener("0"));
 		b1.addSelectionListener(c.getNumPressListener("1"));
@@ -177,18 +187,19 @@ public class CalcView implements Observer{
 		
 	}
 	//Yeah it's what you think
-		private boolean isLongable(Double d){
-			if(d %1 == 0){
-				return true;
-	 		}
-			return false;
+	private boolean isLongable(Double d){
+		if(d %1 == 0){
+			return true;
+ 		}
+		return false;
+	}
+	//Take a list of strings and return one string of the parts
+	private String formatList(ArrayList<String> list){
+		String result = "";
+		for(String s:list){
+			result = result + s;			
 		}
-		private String formatList(ArrayList<String> list){
-			String result = "";
-			for(String s:list){
-				result = result + s;
-			}
-			return result;
-		}
+		return result;
+	}
 
 }
