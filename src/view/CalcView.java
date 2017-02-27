@@ -34,7 +34,6 @@ public class CalcView implements Observer{
 		shell.setText( "SWT Calculator" ); 
 		shell.setSize( 400, 500 );
 		
-		
 		initializeComponents(shell);
 		setListeners();
 		
@@ -46,6 +45,7 @@ public class CalcView implements Observer{
 	    int y = monitorSize.y + (monitorSize.height - windowSize.height) / 2;
 	    shell.setLocation(x, y);
 	    shell.setMinimumSize(350, 400);
+	    shell.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 		shell.open();
 		while( !shell.isDisposed() ) { if( !display.readAndDispatch() ) { display.sleep();
 		}
@@ -79,12 +79,17 @@ public class CalcView implements Observer{
 	//Set up the screen components
 	public void initializeComponents(final Shell shell){
 		GridLayout gridLayout = new GridLayout(4, false);
+		gridLayout.marginBottom = 5;
+		gridLayout.marginHeight = 5;
+		gridLayout.marginLeft = 5;
+		gridLayout.marginRight = 5;
+		gridLayout.verticalSpacing = 10;
+		gridLayout.horizontalSpacing = 10;
 		gridLayout.makeColumnsEqualWidth = true;
 		shell.setLayout(gridLayout);
 		GridData screenData = new GridData();
 	    screenData.horizontalSpan = 4;
 	    screenData.grabExcessHorizontalSpace = true;
-	    screenData.grabExcessVerticalSpace = true;
 	    screenData.horizontalAlignment = GridData.FILL;
 	    screen = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	    screen.setOrientation(SWT.RIGHT_TO_LEFT);
@@ -159,8 +164,6 @@ public class CalcView implements Observer{
 		bEq = new Button(shell, SWT.PUSH);
 		bEq.setLayoutData(buttonData);
 		bEq.setText(" = ");
-		
-		
 	}
 	//Set the listeners in the controller to listen to the components
 	public void setListeners(){

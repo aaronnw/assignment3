@@ -110,6 +110,9 @@ public class Controller {
 			if(front.contains(".") && c == '.'){
 				return;
 			}
+			if(isOp(front) && isOp(c)){
+				list.remove(list.size()-1);
+			}
 			if(!isOp(front) && !isOp(c)){
 				m.removeListEnd();
 				m.addToList(front+c);
