@@ -17,10 +17,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class CalcView implements Observer{
-	Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre;
-	Text screen;
-	Controller c;
-	Model m;
+	private Button b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre;
+	private Text screen;
+	private final Controller c;
+	private final Model m;
 
 	//Create the view with a given model and controller
 	public CalcView (Model myModel, Controller controller) {

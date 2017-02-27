@@ -9,7 +9,7 @@ import model.Model;
 
 public class Controller {
 
-	Model m;
+	private final Model m;
 	
 	//Create a controller with a model to update
 	public Controller(Model myModel) {
@@ -26,9 +26,7 @@ public class Controller {
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void widgetDefaultSelected(SelectionEvent e) {				
 			}
 		};
 	}
@@ -43,7 +41,6 @@ public class Controller {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
 			}
 		};
 	}
@@ -58,7 +55,6 @@ public class Controller {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
 			}
 		};
 	}
@@ -73,7 +69,6 @@ public class Controller {
 			
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				
 			}
 		};
 	}
@@ -88,9 +83,7 @@ public class Controller {
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void widgetDefaultSelected(SelectionEvent e) {				
 			}
 		};
 	}
@@ -105,9 +98,7 @@ public class Controller {
 			}
 			
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void widgetDefaultSelected(SelectionEvent e) {				
 			}
 		};
 	}

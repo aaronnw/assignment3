@@ -5,9 +5,9 @@ import java.util.Observable;
 
 public class Model extends Observable{
 	
-	ArrayList<String> list;
-	Double output; 
-	ArrayList<String> memory;
+	private ArrayList<String> list;
+	private Double output; 
+	private ArrayList<String> memory;
 
 	//Creates a model and initializes variables
 	public Model(){
