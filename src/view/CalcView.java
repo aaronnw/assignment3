@@ -1,6 +1,7 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 import controller.Controller;
@@ -23,6 +24,7 @@ public class CalcView implements Observer{
 	private Text screen;
 	private final Controller c;
 	private final Model m;
+	private Shell shell;
 
 	//Create the view with a given model and controller
 	public CalcView (Model myModel, Controller controller) {
@@ -32,11 +34,11 @@ public class CalcView implements Observer{
 	//Create a shell to display to the user
 	public void showView(){
 		Display display = new Display();
-		Shell shell = new Shell( display );
+		shell = new Shell( display );
 		shell.setText( "SWT Calculator" ); 
 		shell.setSize( 400, 500 );
 		
-		initializeComponents(shell);
+		initializeComponents();
 		setListeners();
 		
 		//Center the shell and display it
@@ -70,7 +72,7 @@ public class CalcView implements Observer{
 			String formattedList = formatList(m.getList());
 			screen.setText(formattedList);
 		}else if(arg.equals("error")){
-			screen.setText("Syntax error in expression");
+			screen.setText("Error in expression");
 		}
 		//Display 0 if there are no results to display
 		if(screen.getText().length() == 0){
@@ -79,29 +81,12 @@ public class CalcView implements Observer{
 		
 	}
 	//Set up the screen components
-	public void initializeComponents(final Shell shell){
-		GridLayout gridLayout = new GridLayout(4, false);
-		gridLayout.marginBottom = 5;
-		gridLayout.marginHeight = 5;
-		gridLayout.marginLeft = 5;
-		gridLayout.marginRight = 5;
-		gridLayout.verticalSpacing = 10;
-		gridLayout.horizontalSpacing = 10;
-		gridLayout.makeColumnsEqualWidth = true;
+	public void initializeComponents(){
+		GridLayout gridLayout = createGridLayout();
 		shell.setLayout(gridLayout);
-		GridData screenData = new GridData();
-	    screenData.horizontalSpan = 4;
-	    screenData.grabExcessHorizontalSpace = true;
-	    screenData.horizontalAlignment = GridData.FILL;
+		screen = createScreen();
 	    FontData fd = new FontData();
 	    fd.setHeight(12);
-	    screen = new Text(shell, SWT.SINGLE | SWT.BORDER);
-	    screen.setOrientation(SWT.RIGHT_TO_LEFT);
-	    screen.setTextDirection(SWT.LEFT_TO_RIGHT);
-	    screen.setText("0");
-	    screen.setEditable(false);
-	    screen.setLayoutData(screenData);
-	    screen.setFont(new Font(shell.getDisplay(), fd));
 	    GridData buttonData = new GridData();
 	    buttonData.minimumHeight = 50;
 	    buttonData.minimumWidth = 80;
@@ -110,85 +95,78 @@ public class CalcView implements Observer{
 	    buttonData.horizontalAlignment = GridData.FILL;
 	    buttonData.verticalAlignment = GridData.FILL;
 	    bClear = new Button(shell, SWT.PUSH);
-	    bClear.setLayoutData(buttonData);
 	    bClear.setText("CE");
-	    bClear.setFont(new Font(shell.getDisplay(), fd));
 		bBack = new Button(shell, SWT.PUSH);
-		bBack.setLayoutData(buttonData);
 		bBack.setText("<-");
-		bBack.setFont(new Font(shell.getDisplay(), fd));
 		bMadd = new Button(shell, SWT.PUSH);
-		bMadd.setLayoutData(buttonData);
 		bMadd.setText("M-Add");
-		bMadd.setFont(new Font(shell.getDisplay(), fd));
 		bMre = new Button(shell, SWT.PUSH);
-		bMre.setLayoutData(buttonData);
 		bMre.setText("M-Recall");
-		bMre.setFont(new Font(shell.getDisplay(), fd));
 		b7 = new Button(shell, SWT.PUSH);
-		b7.setLayoutData(buttonData);
 		b7.setText("7");
-		b7.setFont(new Font(shell.getDisplay(), fd));
 		b8 = new Button(shell, SWT.PUSH);
-		b8.setLayoutData(buttonData);
 		b8.setText("8");
-		b8.setFont(new Font(shell.getDisplay(), fd));
 		b9 = new Button(shell, SWT.PUSH);
-		b9.setLayoutData(buttonData);
 		b9.setText("9");
-		b9.setFont(new Font(shell.getDisplay(), fd));
 		bDiv = new Button(shell, SWT.PUSH);
-		bDiv.setLayoutData(buttonData);
 		bDiv.setText(" / ");
-		bDiv.setFont(new Font(shell.getDisplay(), fd));
 		b4 = new Button(shell, SWT.PUSH);
-		b4.setLayoutData(buttonData);
 		b4.setText("4");
-		b4.setFont(new Font(shell.getDisplay(), fd));
 		b5 = new Button(shell, SWT.PUSH);
-		b5.setLayoutData(buttonData);
 		b5.setText("5");
-		b5.setFont(new Font(shell.getDisplay(), fd));
 		b6 = new Button(shell, SWT.PUSH);
-		b6.setLayoutData(buttonData);
 		b6.setText("6");
-		b6.setFont(new Font(shell.getDisplay(), fd));
 		bMult = new Button(shell, SWT.PUSH);
-		bMult.setLayoutData(buttonData);
 		bMult.setText(" * ");
-		bMult.setFont(new Font(shell.getDisplay(), fd));
 		b1 = new Button(shell, SWT.PUSH);
-		b1.setLayoutData(buttonData);
 		b1.setText("1");
-		b1.setFont(new Font(shell.getDisplay(), fd));
 		b2 = new Button(shell, SWT.PUSH);
-		b2.setLayoutData(buttonData);
 		b2.setText("2");
-		b2.setFont(new Font(shell.getDisplay(), fd));
 		b3 = new Button(shell, SWT.PUSH);
-		b3.setLayoutData(buttonData);
 		b3.setText("3");
-		b3.setFont(new Font(shell.getDisplay(), fd));
 		bMin = new Button(shell, SWT.PUSH);
-		bMin.setLayoutData(buttonData);
 		bMin.setText(" - ");
-		bMin.setFont(new Font(shell.getDisplay(), fd));
 		b0 = new Button(shell, SWT.PUSH);
-		b0.setLayoutData(buttonData);
 		b0.setText("0");
-		b0.setFont(new Font(shell.getDisplay(), fd));
 		bDec = new Button(shell, SWT.PUSH);
-		bDec.setLayoutData(buttonData);
 		bDec.setText(" . ");
-		bDec.setFont(new Font(shell.getDisplay(), fd));
 		bAdd = new Button(shell, SWT.PUSH);
-		bAdd.setLayoutData(buttonData);
 		bAdd.setText(" + ");
-		bAdd.setFont(new Font(shell.getDisplay(), fd));
 		bEq = new Button(shell, SWT.PUSH);
-		bEq.setLayoutData(buttonData);
 		bEq.setText(" = ");
-	    bEq.setFont(new Font(shell.getDisplay(), fd));
+	    ArrayList<Button> buttonList = new ArrayList<Button>(Arrays.asList(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre));
+	    for(Button b:buttonList){
+	    	b.setLayoutData(buttonData);
+	    	b.setFont(new Font(shell.getDisplay(), fd));
+	    }
+	}
+	//
+	public GridLayout createGridLayout(){
+		GridLayout gridLayout = new GridLayout(4, false);
+		gridLayout.marginBottom = 5;
+		gridLayout.marginHeight = 5;
+		gridLayout.marginLeft = 5;
+		gridLayout.marginRight = 5;
+		gridLayout.verticalSpacing = 10;
+		gridLayout.horizontalSpacing = 10;
+		gridLayout.makeColumnsEqualWidth = true;
+		return gridLayout;
+	}
+	public Text createScreen(){
+		GridData screenData = new GridData();
+	    screenData.horizontalSpan = 4;
+	    screenData.grabExcessHorizontalSpace = true;
+	    screenData.horizontalAlignment = GridData.FILL;
+	    FontData screenFont = new FontData();
+	    screenFont.setHeight(18);
+	    screen = new Text(shell, SWT.SINGLE | SWT.BORDER);
+	    screen.setOrientation(SWT.RIGHT_TO_LEFT);
+	    screen.setTextDirection(SWT.LEFT_TO_RIGHT);
+	    screen.setText("0");
+	    screen.setEditable(false);
+	    screen.setLayoutData(screenData);
+	    screen.setFont(new Font(shell.getDisplay(), screenFont));
+	    return screen;
 	}
 	//Set the listeners in the controller to listen to the components
 	public void setListeners(){
