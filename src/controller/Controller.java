@@ -1,5 +1,6 @@
 package controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import org.eclipse.swt.events.SelectionEvent;
@@ -171,16 +172,18 @@ public class Controller {
 		ArrayList<String> list = m.getList();
 		//Iterate through the list, starting from the second and going to the second to last
 		for(int i = 1; i < list.size() -1 ; i ++){
-			Double result = 0.0;
+			BigDecimal result = new BigDecimal("0");
 			String current = list.get(i);
 			//If there is a priority op
 			if(isPriorityOp(current)){
 				String next = list.get(i+1);
 				String prev = list.get(i-1);
+				BigDecimal firstNum = BigDecimal.valueOf(Double.parseDouble(prev));
+				BigDecimal secondNum = BigDecimal.valueOf(Double.parseDouble(next));
 				if(current.equals("*")){
-					result = Double.parseDouble(prev) * Double.parseDouble(next); 
+					result = firstNum.multiply(secondNum);
 				}else if(current.equals("/")){
-					result = Double.parseDouble(prev) / Double.parseDouble(next); 
+					result = firstNum.divide(secondNum);
 				}
 			    	list.set(i-1, result.toString());
 			    	//Remove i twice to remove the next two elements
@@ -202,14 +205,16 @@ public class Controller {
 		}
 		//If there is a string with a number, then operator, then number, calculate the result and repeat
 		if(!isOp(list.get(0)) && isOp(list.get(1)) && !isOp(list.get(2))){
-			Double result = 0.0; 
+			BigDecimal result = new BigDecimal("0"); 
 			Double first = Double.parseDouble(list.get(0));
+			BigDecimal bFirst = BigDecimal.valueOf(first);
 			String op = list.get(1);
 			Double second = Double.parseDouble(list.get(2));
+			BigDecimal bSecond = BigDecimal.valueOf(second);
 			if(op.equals("+")){
-				 result = first + second;
+				 result = bFirst.add(bSecond);
 			}else if(op.equals("-")){
-				 result = first - second;
+				 result = bFirst.subtract(bSecond);
 			}
 			list.set(0, result.toString());
 			//Remove 1 twice to remove the next two elements
