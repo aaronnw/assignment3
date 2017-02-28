@@ -143,6 +143,7 @@ public class CalcView implements Observer{
 	    for(Button b:numberList){
 	    	b.setLayoutData(buttonData);
 	    	b.setFont(new Font(shell.getDisplay(), numFont));
+	    	b.setForeground(shell.getDisplay().getSystemColor(SWT.COLOR_DARK_RED));
 	    }
 	}
 
