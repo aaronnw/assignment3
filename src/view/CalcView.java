@@ -85,8 +85,8 @@ public class CalcView implements Observer{
 		GridLayout gridLayout = createGridLayout();
 		shell.setLayout(gridLayout);
 		screen = createScreen();
-	    FontData fd = new FontData();
-	    fd.setHeight(12);
+	    FontData buttonFont = new FontData("Verdana", 12, SWT.NORMAL);
+	    FontData numFont = new FontData("Verdana", 12, SWT.BOLD);
 	    GridData buttonData = new GridData();
 	    buttonData.minimumHeight = 50;
 	    buttonData.minimumWidth = 80;
@@ -134,13 +134,18 @@ public class CalcView implements Observer{
 		bAdd.setText(" + ");
 		bEq = new Button(shell, SWT.PUSH);
 		bEq.setText(" = ");
-	    ArrayList<Button> buttonList = new ArrayList<Button>(Arrays.asList(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec, bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre));
+	    ArrayList<Button> buttonList = new ArrayList<Button>(Arrays.asList(bAdd, bMin, bMult, bDiv, bEq, bClear, bBack, bMadd, bMre));
 	    for(Button b:buttonList){
 	    	b.setLayoutData(buttonData);
-	    	b.setFont(new Font(shell.getDisplay(), fd));
+	    	b.setFont(new Font(shell.getDisplay(), buttonFont));
+	    }
+	    ArrayList<Button> numberList = new ArrayList<Button>(Arrays.asList(b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, bDec));
+	    for(Button b:numberList){
+	    	b.setLayoutData(buttonData);
+	    	b.setFont(new Font(shell.getDisplay(), numFont));
 	    }
 	}
-	//
+
 	public GridLayout createGridLayout(){
 		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.marginBottom = 5;
@@ -157,8 +162,7 @@ public class CalcView implements Observer{
 	    screenData.horizontalSpan = 4;
 	    screenData.grabExcessHorizontalSpace = true;
 	    screenData.horizontalAlignment = GridData.FILL;
-	    FontData screenFont = new FontData();
-	    screenFont.setHeight(18);
+	    FontData screenFont = new FontData("Verdana", 18, SWT.NORMAL);
 	    screen = new Text(shell, SWT.SINGLE | SWT.BORDER);
 	    screen.setOrientation(SWT.RIGHT_TO_LEFT);
 	    screen.setTextDirection(SWT.LEFT_TO_RIGHT);
