@@ -48,7 +48,7 @@ public class CalcView implements Observer{
 	    int x = monitorSize.x + (monitorSize.width - windowSize.width) / 2;
 	    int y = monitorSize.y + (monitorSize.height - windowSize.height) / 2;
 	    shell.setLocation(x, y);
-	    shell.setMinimumSize(400, 400);
+	    shell.setMinimumSize(425, 400);
 	    shell.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 		shell.open();
 		while( !shell.isDisposed() ) { if( !display.readAndDispatch() ) { display.sleep();
@@ -89,7 +89,7 @@ public class CalcView implements Observer{
 	    FontData numFont = new FontData("Verdana", 12, SWT.BOLD);
 	    GridData buttonData = new GridData();
 	    buttonData.minimumHeight = 50;
-	    buttonData.minimumWidth = 80;
+	    buttonData.minimumWidth = 90;
 	    buttonData.grabExcessHorizontalSpace = true;
 	    buttonData.grabExcessVerticalSpace = true;
 	    buttonData.horizontalAlignment = GridData.FILL;
