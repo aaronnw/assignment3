@@ -1,6 +1,7 @@
 package controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import org.eclipse.swt.events.SelectionEvent;
@@ -183,7 +184,7 @@ public class Controller {
 				if(current.equals("*")){
 					result = firstNum.multiply(secondNum);
 				}else if(current.equals("/")){
-					result = firstNum.divide(secondNum);
+					result = firstNum.divide(secondNum, 8, RoundingMode.HALF_UP);
 				}
 			    	list.set(i-1, result.toString());
 			    	//Remove i twice to remove the next two elements
